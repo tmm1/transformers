@@ -50,6 +50,6 @@ jobs:
         with:
           context: ./docker/transformers-all-latest-gpu
           build-args: |
-            REF=main
+            REF=07cde58b
           push: true
           tags: huggingface/transformers-all-latest-gpu${{ inputs.image_postfix }}-test
