@@ -511,6 +511,7 @@ class TFXLNetMainLayer(tf.keras.layers.Layer):
         return ret
 
     def cache_mem(self, curr_out, prev_mem):
+        import pdb; pdb.set_trace()
         # cache hidden states into memory.
         if self.reuse_len is not None and self.reuse_len > 0:
             curr_out = curr_out[: self.reuse_len]
@@ -734,6 +735,7 @@ class TFXLNetMainLayer(tf.keras.layers.Layer):
         for i, layer_module in enumerate(self.layer):
             # cache new mems
             if use_mems:
+                import pdb; pdb.set_trace()
                 new_mems = new_mems + (self.cache_mem(output_h, mems[i]),)
             if output_hidden_states:
                 hidden_states.append((output_h, output_g) if output_g is not None else output_h)
