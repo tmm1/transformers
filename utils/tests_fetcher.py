@@ -407,7 +407,7 @@ def get_doctest_files(diff_with_last_commit: bool = False) -> List[str]:
     test_files_to_run = [x for x in test_files_to_run if x not in not_doctested and x not in slow_documentation_tests]
 
     # The file `utils/not_doctested.txt` doesn't contain all files that are not doc-tested, so we need more filters.
-    # 1. only include files in `src` or `docs`
+    # 1. only include files in `src` or `docs/source/en/`
     test_files_to_run = [x for x in test_files_to_run if x.startswith(("src/", "docs/source/en/"))]
     # 2. not include init files
     test_files_to_run = [x for x in test_files_to_run if not x.endswith(("__init__.py",))]
