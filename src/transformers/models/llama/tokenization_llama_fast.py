@@ -24,7 +24,7 @@ from ...utils.versions import require_version
 
 
 if TYPE_CHECKING:
-    pass
+    from transformers.pipelines.conversational import Conversation
 
 require_version("tokenizers>=0.13.3")
 
@@ -189,7 +189,6 @@ class LlamaTokenizerFast(PreTrainedTokenizerFast):
 
         return (out_vocab_file,)
 
-
     @property
     def default_prompt_config(self):
         role_prefixes = {
@@ -282,4 +281,3 @@ class LlamaTokenizerFast(PreTrainedTokenizerFast):
             f"{B_INST} {(dialogue[-1][1]).strip()} {E_INST}", add_special_tokens=False
         )
         return dialog_tokens
-

@@ -31,6 +31,8 @@ from ...utils import logging
 
 
 if TYPE_CHECKING:
+    from transformers.pipelines.conversational import Conversation
+
     from ...tokenization_utils_base import TextInput
 
 logger = logging.get_logger(__name__)
@@ -367,7 +369,6 @@ class LlamaTokenizer(PreTrainedTokenizer):
 
         return output
 
-
     @property
     def default_prompt_config(self):
         role_prefixes = {
@@ -460,4 +461,3 @@ class LlamaTokenizer(PreTrainedTokenizer):
             f"{B_INST} {(dialogue[-1][1]).strip()} {E_INST}", add_special_tokens=False
         )
         return dialog_tokens
-
