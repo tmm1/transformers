@@ -1575,6 +1575,9 @@ utils/get_modified_files.py
 utils/get_previous_daily_ci.py
 utils/get_test_info.py
 utils/notification_service.py
+utils/notification_service_doc_tests.py
+utils/past_ci_versions.py
+utils/print_env.py
 utils/release.py
 utils/sort_auto_mappings.py
 utils/test_module/custom_configuration.py
