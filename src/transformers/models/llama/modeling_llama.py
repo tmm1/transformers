@@ -26,8 +26,9 @@ import torch.nn.functional as F
 import torch.utils.checkpoint
 from torch import nn
 from torch.nn import BCEWithLogitsLoss, MSELoss
+
 from flash_attn.losses.cross_entropy import CrossEntropyLoss
-import flash_attn.ops.rms_norm
+from flash_attn.ops.rms_norm import RMSNorm
 
 from ...activations import ACT2FN
 from ...modeling_outputs import BaseModelOutputWithPast, CausalLMOutputWithPast, SequenceClassifierOutputWithPast
@@ -74,7 +75,7 @@ def _expand_mask(mask: torch.Tensor, dtype: torch.dtype, tgt_len: Optional[int] 
     return inverted_mask.masked_fill(inverted_mask.to(torch.bool), torch.finfo(dtype).min)
 
 
-class LlamaRMSNorm(flash_attn.ops.rms_norm.RMSNorm):
+class LlamaRMSNorm(RMSNorm):
     def __init__(self, hidden_size, eps=1e-6):
         """
         LlamaRMSNorm is equivalent to T5LayerNorm
