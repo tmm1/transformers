@@ -29,6 +29,7 @@ from torch.nn import BCEWithLogitsLoss, MSELoss
 
 from flash_attn.losses.cross_entropy import CrossEntropyLoss
 from flash_attn.ops.rms_norm import RMSNorm
+from flash_attn.layers.rotary import apply_rotary_emb
 
 from ...activations import ACT2FN
 from ...modeling_outputs import BaseModelOutputWithPast, CausalLMOutputWithPast, SequenceClassifierOutputWithPast
@@ -324,7 +325,14 @@ class LlamaAttention(nn.Module):
         if past_key_value is not None:
             kv_seq_len += past_key_value[0].shape[-2]
         cos, sin = self.rotary_emb(value_states, seq_len=kv_seq_len)
-        query_states, key_states = apply_rotary_pos_emb(query_states, key_states, cos, sin, position_ids)
+        cos = cos.squeeze(1).squeeze(0)[position_ids].squeeze(0)
+        sin = sin.squeeze(1).squeeze(0)[position_ids].squeeze(0)
+        # cos, sin: (seqlen_rotary, rotary_dim / 2)
+        cos = cos[..., :cos.shape[-1] * 2:2]
+        sin = sin[..., :sin.shape[-1] * 2:2]
+        # fused rope expects (batch_size, seqlen, nheads, headdim)
+        query_states = apply_rotary_emb(query_states.transpose(1, 2), cos, sin, inplace=True).transpose(1, 2)
+        key_states = apply_rotary_emb(key_states.transpose(1, 2), cos, sin, inplace=True).transpose(1, 2)
 
         if past_key_value is not None:
             # reuse k, v, self_attention
